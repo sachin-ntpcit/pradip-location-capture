@@ -253,16 +253,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📋 PRADIP - Data Centre Infrastructure Update</h1>
-            <p>Please fill out the form below, then click the button to capture your location</p>
-        </div>
-        
-        <div class="instruction-banner">
-            ⚠️ After submitting the form, please click the button below to capture your location
-        </div>
-        
+    <div class="container">    
         <div class="form-container">
             <iframe id="googleForm" src="https://forms.gle/nquHqjLsmBAgmfMN7"></iframe>
             <div class="action-button" id="captureButton">
@@ -296,7 +287,7 @@
                     <div class="status-details">Your form submission is now complete with location data.</div>
                 </div>
                 <div class="address-display" id="addressDisplay"></div>
-                <button class="btn btn-primary" onclick="closeAndRefresh()">Done - Submit Another Form</button>
+                <button class="btn btn-primary" onclick="closeWindow()">Close</button>
             </div>
             
             <!-- Error State -->
@@ -466,13 +457,16 @@
             document.getElementById('overlay').classList.remove('show');
         }
         
-        function closeAndRefresh() {
-            document.getElementById('overlay').classList.remove('show');
-            // Reload the page to allow another submission
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
-        }
+        function closeWindow() {
+    document.getElementById('overlay').classList.remove('show');
+    // Try to close the window/tab
+    window.close();
+    
+    // If window.close() doesn't work (some browsers block it), show a message
+    setTimeout(() => {
+        alert('Location saved successfully! You can now close this tab/window.');
+    }, 500);
+}
     </script>
 </body>
 </html>
