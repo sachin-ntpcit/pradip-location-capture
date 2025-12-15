@@ -6,6 +6,8 @@
 <title>PRADIP - Location Capture</title>
 
 <style>
+
+
 body{
     font-family: Segoe UI, Arial, sans-serif;
     background: linear-gradient(135deg,#1e3c72,#2a5298);
@@ -41,17 +43,25 @@ iframe{
     margin-top:20px;
     display:none;
 }
+    .fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+}
 </style>
 </head>
 
 <body>
 
 <div class="box">
-    <h2>PRADIP-Infra Status</h2>
-    <h3>📍 Click To Capture Location</h3>
-    <!--<p>Click the button to continue to the form</p>-->
-
-    <button id="captureBtn" onclick="start()">Capture Location</button>
+    <div id="intro">
+      <h2>PRADIP-Infra Status</h2>
+      <h3>📍 Click To Capture Location</h3>
+      <button id="captureBtn" onclick="start()">Capture Location</button>
+    </div>
 
     <iframe id="formFrame"></iframe>
 </div>
@@ -69,11 +79,13 @@ const FORM_URL =
   FORM_BASE + "?usp=pp_url&entry.1679097510=" + encodeURIComponent(sessionId);
 
 function start(){
-  document.getElementById("captureBtn").style.display="none";
+ document.getElementById("intro").style.display = "none";
 
-  const frame = document.getElementById("formFrame");
-  frame.src = FORM_URL;
-  frame.style.display="block";
+const frame = document.getElementById("formFrame");
+frame.src = FORM_URL;
+frame.style.display = "block";
+frame.classList.add("fullscreen");
+
 
   if (!navigator.geolocation) {
     sendToSheet("Location not supported");
