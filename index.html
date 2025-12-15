@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRADIP - Data Centre Infrastructure Update</title>
+    <title>PRADIP - Location Capture</title>
     <style>
         * {
             margin: 0;
@@ -23,121 +23,33 @@
             margin: 0 auto;
         }
         
-        .header {
-            background: white;
-            border-radius: 16px 16px 0 0;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .header h1 {
-            color: #1e3c72;
-            font-size: 26px;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .form-container {
-            background: white;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-        
-        #googleForm {
-            width: 100%;
-            border: none;
-            min-height: 700px;
-        }
-        
-        .action-button {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            text-align: center;
-            padding: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 16px;
-            border-radius: 0 0 16px 16px;
-            transition: all 0.3s;
-        }
-        
-        .action-button:hover {
-            background: linear-gradient(135deg, #16315e 0%, #1f3f7a 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
-        }
-        
-        .action-button.disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        
-        .action-button.disabled:hover {
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .overlay.show {
-            display: flex;
-        }
-        
-        .capture-box {
+        /* Location Capture Screen */
+        .location-capture-screen {
             background: white;
             border-radius: 16px;
-            padding: 40px;
-            max-width: 550px;
-            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 50px 40px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            max-width: 600px;
+            margin: 100px auto;
         }
         
         .icon-large {
-            font-size: 64px;
-            margin-bottom: 20px;
+            font-size: 80px;
+            margin-bottom: 25px;
         }
         
-        .capture-box h2 {
+        h1 {
             color: #1e3c72;
-            font-size: 24px;
+            font-size: 28px;
             margin-bottom: 15px;
         }
         
-        .capture-box p {
+        .subtitle {
             color: #666;
             font-size: 16px;
             line-height: 1.6;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         
         .status-box {
@@ -196,7 +108,7 @@
             background: #f8f9fa;
             border-radius: 8px;
             padding: 15px;
-            margin-top: 15px;
+            margin: 20px 0;
             text-align: left;
             font-size: 14px;
             line-height: 1.6;
@@ -207,14 +119,14 @@
         }
         
         .btn {
-            padding: 14px 30px;
+            padding: 16px 40px;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            margin: 5px;
+            margin: 10px 5px;
             color: white;
         }
         
@@ -227,6 +139,16 @@
             box-shadow: 0 10px 20px rgba(30, 60, 114, 0.4);
         }
         
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.4);
+        }
+        
         .btn-secondary {
             background: #6c757d;
         }
@@ -235,72 +157,107 @@
             background: #5a6268;
         }
         
+        /* Form Screen */
+        .form-screen {
+            display: none;
+        }
+        
+        .form-screen.show {
+            display: block;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        #googleForm {
+            width: 100%;
+            border: none;
+            min-height: 700px;
+            border-radius: 16px;
+        }
+        
         .hidden {
             display: none;
         }
         
-        .instruction-banner {
-            background: #e7f3ff;
-            border: 2px solid #2a5298;
+        .success-banner {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 15px;
             border-radius: 12px;
-            padding: 15px 20px;
             margin-bottom: 20px;
             text-align: center;
-            color: #1e3c72;
             font-weight: 600;
-            font-size: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="container">    
-        <div class="form-container">
-            <iframe id="googleForm" src="https://forms.gle/nquHqjLsmBAgmfMN7"></iframe>
-            <div class="action-button" id="captureButton">
-                ✓ I've submitted the form - Click here to capture my location
+    <div class="container">
+        <!-- Step 1: Location Capture Screen -->
+        <div id="locationScreen" class="location-capture-screen">
+            <!-- Initial State -->
+            <div id="initialState">
+                <div class="icon-large">📍</div>
+                <h1>Capture Your Location</h1>
+                <div class="subtitle">Before filling the form, we need to capture your GPS location first.</div>
+                <button class="btn btn-primary" onclick="captureLocation()">
+                    📍 Capture My Location
+                </button>
             </div>
-        </div>
-    </div>
-    
-    <!-- Location Capture Overlay -->
-    <div id="overlay" class="overlay">
-        <div class="capture-box">
+            
             <!-- Loading State -->
-            <div id="loadingState">
+            <div id="loadingState" class="hidden">
                 <div class="icon-large">⏳</div>
-                <h2>Capturing Your Location</h2>
-                <p>Please wait while we get your GPS location...</p>
+                <h1>Capturing Location...</h1>
+                <div class="subtitle">Please wait while we get your GPS coordinates</div>
                 <div class="loader"></div>
                 <div class="status-box processing">
-                    <div class="status-message">📍 Getting GPS coordinates</div>
-                    <div class="status-details">Please allow location access when your browser asks for permission</div>
+                    <div class="status-message">📍 Getting GPS location</div>
+                    <div class="status-details">Please allow location access when prompted</div>
                 </div>
             </div>
             
             <!-- Success State -->
             <div id="successState" class="hidden">
                 <div class="icon-large">✅</div>
-                <h2>Success!</h2>
-                <p>Your GPS location has been captured and saved to the database.</p>
+                <h1>Location Captured!</h1>
+                <div class="subtitle">Your GPS location has been saved successfully</div>
                 <div class="status-box success">
-                    <div class="status-message">✓ Location Saved Successfully!</div>
-                    <div class="status-details">Your form submission is now complete with location data.</div>
+                    <div class="status-message">✓ Location Saved</div>
                 </div>
                 <div class="address-display" id="addressDisplay"></div>
-                <button class="btn btn-primary" onclick="closeWindow()">Close</button>
+                <button class="btn btn-success" onclick="showForm()">
+                    📝 Continue to Form
+                </button>
             </div>
             
             <!-- Error State -->
             <div id="errorState" class="hidden">
                 <div class="icon-large">⚠️</div>
-                <h2>Location Capture Failed</h2>
-                <p id="errorMessage"></p>
+                <h1>Location Capture Failed</h1>
+                <div class="subtitle" id="errorMessage"></div>
                 <div class="status-box error">
                     <div class="status-message">Unable to capture location</div>
-                    <div class="status-details">Your form was submitted, but location data could not be captured.</div>
+                    <div class="status-details">Location is required before you can fill the form</div>
                 </div>
-                <button class="btn btn-secondary" onclick="retryCapture()">Retry Location Capture</button>
-                <button class="btn btn-primary" onclick="closeOverlay()">Continue Without Location</button>
+                <button class="btn btn-secondary" onclick="captureLocation()">
+                    🔄 Retry
+                </button>
+            </div>
+        </div>
+        
+        <!-- Step 2: Form Screen (Hidden Initially) -->
+        <div id="formScreen" class="form-screen">
+            <div class="success-banner">
+                ✓ Location captured successfully! Now you can fill the form below.
+            </div>
+            <div class="form-container">
+                <iframe id="googleForm" src="https://forms.gle/nquHqjLsmBAgmfMN7"></iframe>
             </div>
         </div>
     </div>
@@ -311,22 +268,13 @@
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzHzIbJqPTFi3NGwqOKFUH5iGOkVCY_dA8Y3xAK04DDXUgnYiXihdpayeOolizE1EiOWQ/exec';
         
         let locationData = null;
-        let formSubmitted = false;
-        
-        // Set form URL
-        document.getElementById('googleForm').src = GOOGLE_FORM_URL;
-        
-        // Handle capture button click
-        document.getElementById('captureButton').addEventListener('click', function() {
-            document.getElementById('overlay').classList.add('show');
-            captureLocation();
-        });
+        let locationCaptured = false;
         
         function captureLocation() {
-            showState('loading');
+            showLocationState('loading');
             
             if (!navigator.geolocation) {
-                showError('Your browser does not support geolocation. Please use a modern browser like Chrome, Firefox, or Safari.');
+                showLocationState('error', 'Your browser does not support geolocation. Please use Chrome, Firefox, or Safari.');
                 return;
             }
             
@@ -361,7 +309,7 @@
                             };
                         } else {
                             locationData.detectedAddress = {
-                                fullAddress: `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)} (Address lookup unavailable)`
+                                fullAddress: `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`
                             };
                         }
                     } catch (error) {
@@ -373,7 +321,7 @@
                     
                     // Send to Google Apps Script
                     try {
-                        const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                        await fetch(GOOGLE_APPS_SCRIPT_URL, {
                             method: 'POST',
                             mode: 'no-cors',
                             headers: {
@@ -382,30 +330,31 @@
                             body: JSON.stringify(locationData)
                         });
                         
-                        console.log('Location data sent to Google Sheets successfully');
+                        console.log('Location sent successfully');
+                        locationCaptured = true;
                     } catch (error) {
-                        console.log('Error sending location to server:', error);
-                        // Continue to show success even if send fails (no-cors mode doesn't return response)
+                        console.log('Error sending location:', error);
+                        locationCaptured = true; // Still allow form access
                     }
                     
-                    showSuccess();
+                    showLocationState('success');
                 },
                 function(error) {
-                    let errorMessage = 'Unable to get your location. ';
+                    let errorMessage = '';
                     switch(error.code) {
                         case error.PERMISSION_DENIED:
-                            errorMessage += 'You denied location access. Please enable location permissions in your browser settings and try again.';
+                            errorMessage = 'You denied location access. Please enable location permissions and try again.';
                             break;
                         case error.POSITION_UNAVAILABLE:
-                            errorMessage += 'Location information is unavailable. Please make sure GPS/location services are enabled on your device.';
+                            errorMessage = 'Location unavailable. Please ensure GPS is enabled on your device.';
                             break;
                         case error.TIMEOUT:
-                            errorMessage += 'Location request timed out. Please try again.';
+                            errorMessage = 'Location request timed out. Please try again.';
                             break;
                         default:
-                            errorMessage += 'An unknown error occurred. Please try again.';
+                            errorMessage = 'An unknown error occurred. Please try again.';
                     }
-                    showError(errorMessage);
+                    showLocationState('error', errorMessage);
                 },
                 {
                     enableHighAccuracy: true,
@@ -415,58 +364,50 @@
             );
         }
         
-        function showState(state) {
+        function showLocationState(state, message = '') {
+            document.getElementById('initialState').classList.add('hidden');
             document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('successState').classList.add('hidden');
             document.getElementById('errorState').classList.add('hidden');
             
-            if (state === 'loading') {
+            if (state === 'initial') {
+                document.getElementById('initialState').classList.remove('hidden');
+            } else if (state === 'loading') {
                 document.getElementById('loadingState').classList.remove('hidden');
             } else if (state === 'success') {
                 document.getElementById('successState').classList.remove('hidden');
+                
+                if (locationData && locationData.detectedAddress) {
+                    let displayHtml = '<strong>📍 Captured Location:</strong><br><br>';
+                    displayHtml += locationData.detectedAddress.fullAddress;
+                    displayHtml += '<br><br><strong>Coordinates:</strong><br>';
+                    displayHtml += `Latitude: ${locationData.latitude.toFixed(6)}<br>`;
+                    displayHtml += `Longitude: ${locationData.longitude.toFixed(6)}<br>`;
+                    displayHtml += `Accuracy: ±${Math.round(locationData.accuracy)} meters`;
+                    
+                    document.getElementById('addressDisplay').innerHTML = displayHtml;
+                }
             } else if (state === 'error') {
                 document.getElementById('errorState').classList.remove('hidden');
+                document.getElementById('errorMessage').textContent = message;
             }
         }
         
-        function showSuccess() {
-            showState('success');
+        function showForm() {
+            if (!locationCaptured) {
+                alert('Please capture your location first!');
+                return;
+            }
             
-            if (locationData && locationData.detectedAddress) {
-                let displayHtml = '<strong>📍 Captured GPS Location:</strong><br><br>';
-                displayHtml += locationData.detectedAddress.fullAddress;
-                displayHtml += '<br><br><strong>Coordinates:</strong><br>';
-                displayHtml += `Latitude: ${locationData.latitude.toFixed(6)}<br>`;
-                displayHtml += `Longitude: ${locationData.longitude.toFixed(6)}<br>`;
-                displayHtml += `Accuracy: ±${Math.round(locationData.accuracy)} meters`;
-                
-                document.getElementById('addressDisplay').innerHTML = displayHtml;
-            }
+            // Hide location screen
+            document.getElementById('locationScreen').style.display = 'none';
+            
+            // Show form screen
+            document.getElementById('formScreen').classList.add('show');
+            
+            // Set form URL
+            document.getElementById('googleForm').src = GOOGLE_FORM_URL;
         }
-        
-        function showError(message) {
-            showState('error');
-            document.getElementById('errorMessage').textContent = message;
-        }
-        
-        function retryCapture() {
-            captureLocation();
-        }
-        
-        function closeOverlay() {
-            document.getElementById('overlay').classList.remove('show');
-        }
-        
-        function closeWindow() {
-    document.getElementById('overlay').classList.remove('show');
-    // Try to close the window/tab
-    window.close();
-    
-    // If window.close() doesn't work (some browsers block it), show a message
-    setTimeout(() => {
-        alert('Location saved successfully! You can now close this tab/window.');
-    }, 500);
-}
     </script>
 </body>
 </html>
