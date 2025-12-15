@@ -56,15 +56,14 @@ iframe{
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHzIbJqPTFi3NGwqOKFUH5iGOkVCY_dA8Y3xAK04DDXUgnYiXihdpayeOolizE1EiOWQ/exec";
+const SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbzHzIbJqPTFi3NGwqOKFUH5iGOkVCY_dA8Y3xAK04DDXUgnYiXihdpayeOolizE1EiOWQ/exec";
 
-// LONG FORM URL (IMPORTANT)
 const FORM_BASE =
   "https://docs.google.com/forms/d/e/1FAIpQLSdnZQ0a0499eiegMd34Qq3_9ggogvPjk8c9TQiMn8qUCy8T_Q/viewform";
 
 const sessionId = "SID-" + Date.now() + "-" + Math.floor(Math.random()*10000);
 
-// Prefilled form URL with SessionID
 const FORM_URL =
   FORM_BASE + "?usp=pp_url&entry.1679097510=" + encodeURIComponent(sessionId);
 
@@ -75,36 +74,52 @@ function start(){
   frame.src = FORM_URL;
   frame.style.display="block";
 
-  // Try capturing location (form should load regardless)
-  if (!navigator.geolocation) return;
+  if (!navigator.geolocation) {
+    sendToSheet("Location not supported");
+    return;
+  }
 
   navigator.geolocation.getCurrentPosition(
-    pos => {
-      const payload = {
-        sessionId: sessionId,
-        location: `Lat:${pos.coords.latitude}, Lng:${pos.coords.longitude}`
-      };
+    async pos => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      let address = "";
 
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify(payload)
-      });
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
+          {
+            headers: { "User-Agent": "PRADIP-Location-Capture/1.0" }
+          }
+        );
+        const data = await res.json();
+        address = data.display_name || "";
+      } catch (e) {
+        address = "";
+      }
+
+      const fullLocation =
+        (address ? address + "\n" : "") +
+        `(Lat: ${lat}, Lng: ${lng})`;
+
+      sendToSheet(fullLocation);
     },
-    err => {
-      // Location denied or failed — still OK
-      const payload = {
-        sessionId: sessionId,
-        location: "Location not allowed / unavailable"
-      };
-
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify(payload)
-      });
-    }
+    () => {
+      sendToSheet("Location permission denied / unavailable");
+    },
+    { enableHighAccuracy:true, timeout:15000 }
   );
+}
+
+function sendToSheet(locationText){
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      sessionId: sessionId,
+      location: locationText
+    })
+  });
 }
 </script>
 
