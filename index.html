@@ -22,8 +22,8 @@ body{
     border-radius:16px;
     box-shadow:0 20px 60px rgba(0,0,0,.3);
     text-align:center;
-    width:90%;
-    max-width:700px;
+    width:100%;
+    max-width:none;
 }
 button{
     padding:16px 36px;
@@ -35,13 +35,20 @@ button{
     color:#fff;
     font-weight:600;
 }
-iframe{
-    width:100%;
-    min-height:800px;
-    border:none;
-    border-radius:16px;
-    margin-top:20px;
-    display:none;
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: none;
+}
+    .fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100dvh); /* mobile-safe viewport */
+    border-radius: 0;
+    z-index: 9999;
 }
     
 </style>
@@ -72,11 +79,13 @@ const FORM_URL =
   FORM_BASE + "?usp=pp_url&entry.1679097510=" + encodeURIComponent(sessionId);
 
 function start(){
- document.getElementById("intro").style.display = "none";
+document.getElementById("intro").style.display = "none";
+document.body.style.overflow = "hidden";
 
 const frame = document.getElementById("formFrame");
 frame.src = FORM_URL;
 frame.style.display = "block";
+frame.classList.add("fullscreen");;
 
 
 
